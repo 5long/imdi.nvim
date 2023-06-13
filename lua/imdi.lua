@@ -1,6 +1,7 @@
 local dbus = require('dbus_proxy')
 local uv = vim.uv or vim.loop
 
+local M = {}
 local fcitx5 = nil
 
 local function connect_dbus()
@@ -50,17 +51,14 @@ local function register_autocmd(bufnr)
   })
 end
 
-local function enable_imdi_for_buffer(bufnr)
+M.enable_imdi_for_buffer = function(bufnr)
   bufnr = (bufnr or bufnr ~= 0) and bufnr or vim.fn.bufnr()
   register_autocmd(bufnr)
 end
 
-local function disable_imdi_for_buffer(bufnr)
+M.disable_imdi_for_buffer = function(bufnr)
   bufnr = (bufnr or bufnr ~= 0) and bufnr or vim.fn.bufnr()
   clear_autocmd(bufnr)
 end
 
-return {
-  enable_imdi_for_buffer = enable_imdi_for_buffer,
-  disable_imdi_for_buffer = disable_imdi_for_buffer,
-}
+return M
