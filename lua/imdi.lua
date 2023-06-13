@@ -34,7 +34,18 @@ local function augroup_name_for_buffer(bufnr)
 end
 
 local function clear_autocmd(bufnr)
-  vim.api.nvim_del_augroup_by_name(augroup_name_for_buffer(bufnr))
+  local function error_handler(err)
+    if string.find(err, " Vim:E367: ") then
+      -- Autocmd group doesn't exist. Nothing to do though.
+      return
+    else
+      print(debug.traceback())
+    end
+  end
+
+  xpcall(function()
+    vim.api.nvim_del_augroup_by_name(augroup_name_for_buffer(bufnr))
+  end, error_handler)
 end
 
 local function register_autocmd(bufnr)
