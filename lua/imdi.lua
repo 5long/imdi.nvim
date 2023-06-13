@@ -43,10 +43,12 @@ local function register_autocmd(bufnr)
 
   vim.api.nvim_create_autocmd('InsertEnter', {
     buffer = bufnr,
+    group = augroup,
     callback = activate,
   })
   vim.api.nvim_create_autocmd('InsertLeave', {
     buffer = bufnr,
+    group = augroup,
     callback = deactivate,
   })
 end
