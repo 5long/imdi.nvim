@@ -52,7 +52,6 @@ end
 
 local function enable_imdi_for_buffer(bufnr)
   bufnr = (bufnr or bufnr ~= 0) and bufnr or vim.fn.bufnr()
-  clear_autocmd(bufnr)
   register_autocmd(bufnr)
 end
 
