@@ -1,0 +1,38 @@
+# imdi.nvim
+
+Toggle [input method] when entering / leaving insert mode.
+
+IMDI name means "Input Method DBus Integration"
+
+## Dependencies
+
+* Running [Fcitx5] accessible via session bus of DBus
+* [lua_dbus-proxy]
+
+## Install
+
+With [packer.nvim]:
+
+```
+return require('packer').startup(function(use)
+  use {
+    "5long/imdi.nvim",
+    rocks = 'dbus_proxy',
+  }
+end)
+```
+
+## Usage
+
+Run command `:IMEnable` to enable auto switching for current buffer,
+`:IMDisalbe` to disable it.
+
+## License
+
+See [LICENSE]
+
+[Fcitx5]: https://fcitx-im.org/
+[input method]: https://wiki.archlinux.org/title/Input_method
+[packer.nvim]: https://github.com/wbthomason/packer.nvim
+[lua_dbus-proxy]: https://github.com/stefano-m/lua-dbus_proxy
+[LICENSE]: ./LICENSE
