@@ -59,7 +59,6 @@ end
 
 local function mode_changed(ev)
   local m = vim.fn.mode(1)
-  print(m)
 
   if should_activate(m) then
     return activate()
