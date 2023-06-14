@@ -48,19 +48,38 @@ local function clear_autocmd(bufnr)
   end, error_handler)
 end
 
+local function should_activate(m)
+  -- Neovim doesn't trigger ModeChanged new_mode=no* yet
+  return m == 'i' or m == 'R' or string.find(m, 'no')
+end
+
+local function should_deactivate(m)
+  return m == 'n' or string.find(m, 'ni')
+end
+
+local function mode_changed(ev)
+  local m = vim.fn.mode(1)
+  print(m)
+
+  if should_activate(m) then
+    return activate()
+  end
+
+  if should_deactivate(m) then
+    return deactivate()
+  end
+end
+
 local function register_autocmd(bufnr)
   local augroup = vim.api.nvim_create_augroup(
     augroup_name_for_buffer(bufnr), { clear = true })
 
-  vim.api.nvim_create_autocmd('InsertEnter', {
+  -- ModeChanged matches by pattern
+  -- But we can't match w/ both buffer & pattern
+  vim.api.nvim_create_autocmd('ModeChanged', {
     buffer = bufnr,
     group = augroup,
-    callback = activate,
-  })
-  vim.api.nvim_create_autocmd('InsertLeave', {
-    buffer = bufnr,
-    group = augroup,
-    callback = deactivate,
+    callback = mode_changed,
   })
 end
 
