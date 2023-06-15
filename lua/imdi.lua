@@ -28,36 +28,26 @@ local function init()
   end
 end
 
+local function reconnect_and_retry(action)
+  vim.notify("imdi: failed to " .. action .. "(). Reconnecting")
+  local ok, err = force_init()
+  if ok then
+    fcitx5[action](fcitx5)
+  else
+    vim.notify("imdi: unable to reconnect to DBus:\n" .. tostring(err))
+  end
+end
+
 local function activate()
   init()
   local ok, err = fcitx5:Activate()
-
-  if ok then
-    return
-  end
-
-  vim.notify("imdi: failed to activate input method. Reconnecting")
-  local ok, err = force_init()
-  if ok then
-    fcitx5:Activate()
-  else
-    vim.notify("imdi: unable to activate input method:\n" .. tostring(err))
-  end
+  if not ok then reconnect_and_retry("Activate") end
 end
 
 local function deactivate()
   init()
   local ok, err = fcitx5:Deactivate()
-
-  if ok then return end
-
-  vim.notify("imdi: failed to deactivate input method. Reconnecting")
-  local ok, err = force_init()
-  if ok then
-    fcitx5:Deactivate()
-  else
-    vim.notify("imdi: unable to deactivate input method:\n" .. tostring(err))
-  end
+  if not ok then reconnect_and_retry("Deactivate") end
 end
 
 local function augroup_name_for_buffer(bufnr)
@@ -122,6 +112,10 @@ end
 M.disable_imdi_for_buffer = function(bufnr)
   bufnr = (bufnr or bufnr ~= 0) and bufnr or vim.fn.bufnr()
   clear_autocmd(bufnr)
+end
+
+M.get_fcitx5_conn = function ()
+  return fcitx5
 end
 
 return M
