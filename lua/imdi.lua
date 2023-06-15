@@ -15,18 +15,49 @@ local function connect_dbus()
   )
 end
 
+local function force_init()
+  fcitx5 = connect_dbus()
+  return fcitx5:Ping()
+end
+
 local function init()
-  fcitx5 = fcitx5 or connect_dbus()
+  if fcitx5 then
+    return {}, nil
+  else
+    return force_init()
+  end
 end
 
 local function activate()
   init()
-  fcitx5:Activate()
+  local ok, err = fcitx5:Activate()
+
+  if ok then
+    return
+  end
+
+  vim.notify("imdi: failed to activate input method. Reconnecting")
+  local ok, err = force_init()
+  if ok then
+    fcitx5:Activate()
+  else
+    vim.notify("imdi: unable to activate input method:\n" .. tostring(err))
+  end
 end
 
 local function deactivate()
   init()
-  fcitx5:Deactivate()
+  local ok, err = fcitx5:Deactivate()
+
+  if ok then return end
+
+  vim.notify("imdi: failed to deactivate input method. Reconnecting")
+  local ok, err = force_init()
+  if ok then
+    fcitx5:Deactivate()
+  else
+    vim.notify("imdi: unable to deactivate input method:\n" .. tostring(err))
+  end
 end
 
 local function augroup_name_for_buffer(bufnr)
