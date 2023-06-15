@@ -115,6 +115,7 @@ end
 
 M.enable_imdi_for_buffer = function(bufnr)
   bufnr = (bufnr or bufnr ~= 0) and bufnr or vim.fn.bufnr()
+  init()
   register_autocmd(bufnr)
 end
 
