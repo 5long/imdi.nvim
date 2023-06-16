@@ -1,7 +1,9 @@
-vim.api.nvim_create_user_command('IMEnable', function()
+local create_command = vim.api.nvim_create_user_command
+
+create_command('IMEnable', function()
   require('imdi').enable_imdi_for_buffer()
 end, {})
 
-vim.api.nvim_create_user_command('IMDisable', function()
+create_command('IMDisable', function()
   require('imdi').disable_imdi_for_buffer()
 end, {})
