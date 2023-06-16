@@ -3,6 +3,8 @@ local uv = vim.uv or vim.loop
 
 local M = {}
 local fcitx5 = nil
+local FCITX5_STATE_ACTIVE = 2
+local FCITX5_STATE_INACTIVE = 1
 
 local function connect_dbus()
   return dbus.Proxy:new(
@@ -103,6 +105,43 @@ local function register_autocmd(bufnr)
   })
 end
 
+local function evaluate_sticky_situation(bufnr)
+  init()
+  local im_state = fcitx5:State()
+  if im_state == FCITX5_STATE_ACTIVE then
+    M.enable_imdi_for_buffer(bufnr)
+  elseif im_state == FCITX5_STATE_INACTIVE then
+    M.disable_imdi_for_buffer(bufnr)
+  else
+    print("imdi: unknown input method state "
+      .. im_state .. ". Don't know what to do")
+  end
+end
+
+local function clear_sticky_autocmd(bufnr)
+  local augroup = 'imdi-sticky-' .. bufnr
+  vim.api.nvim_del_augroup_by_name(augroup)
+end
+
+local function registry_sticky_autocmd(bufnr)
+  local augroup = vim.api.nvim_create_augroup(
+    'imdi-sticky-' .. bufnr, { clear = true })
+
+  vim.api.nvim_create_autocmd('InsertLeavePre', {
+    buffer = bufnr,
+    group = augroup,
+    callback = function()
+      evaluate_sticky_situation(bufnr)
+    end,
+  })
+end
+
+local function disable_sticky_for_buffer(bufnr)
+  local augroup = 'imdi-sticky-' .. bufnr
+  vim.api.nvim_del_augroup_by_name(augroup)
+  M.disable_imdi_for_buffer(bufnr)
+end
+
 M.enable_imdi_for_buffer = function(bufnr)
   bufnr = (bufnr or bufnr ~= 0) and bufnr or vim.fn.bufnr()
   init()
@@ -116,6 +155,16 @@ end
 
 M.get_fcitx5_conn = function ()
   return fcitx5
+end
+
+M.enable_sticky_for_buffer = function(bufnr)
+  bufnr = (bufnr or bufnr ~= 0) and bufnr or vim.fn.bufnr()
+  registry_sticky_autocmd(bufnr)
+end
+
+M.disable_sticky_for_buffer = function(bufnr)
+  bufnr = (bufnr or bufnr ~= 0) and bufnr or vim.fn.bufnr()
+  clear_sticky_autocmd(bufnr)
 end
 
 return M
