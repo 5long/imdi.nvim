@@ -1,0 +1,49 @@
+*imdi.txt*                            Input Method DBus Integration for Neovim
+
+Toggling input method automatically via DBus.
+
+For now only Fcitx5 is supported.
+
+==============================================================================
+Usage:                                                            *imdi-usage*
+
+Forced Mode                                                 *imdi-forced-mode*
+
+Run command |:IMEnable| to enable auto-toggling input method in current buffer.
+
+Once enabled for a buffer, it activates input method when:
+
+* entering |Insert| mode
+* entering |Replace| mode
+
+... and deactivates input method when:
+
+* entering normal mode
+* temporarily enabling normal mode by pressing i_CTRL-O
+
+This is recommended to edit a single-language file when you want to activate
+the input method all the time by default.
+
+Run command |:IMDisable| to stop forced mode.
+
+Sticky Mode                                                 *imdi-sticky-mode*
+
+Run command :IMStickyEnable to remember the state of input method the last
+time you leave Insert mode. Run `:IMStickyDisable` to stop it.
+
+This is recommended to edit a mixed-language file when you don't want to
+always activate the input method. In other words, this works just like
+[fcitx.vim]: https://github.com/lilydjwg/fcitx.vim
+
+==============================================================================
+Commands:                                                      *imdi-commands*
+
+:IMEnable                                                          *:IMEnable*
+
+Enable auto-toggling input method for current buffer.
+
+:IMDisable                                                        *:IMDisable*
+
+Disable auto-toggling input method for current buffer
+
+vim:tw=78:ts=8:et:ft=help:norl:
