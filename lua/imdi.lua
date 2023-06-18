@@ -93,8 +93,18 @@ local function mode_changed(ev)
 end
 
 local function register_autocmd(bufnr)
+  local augroup_name = augroup_name_for_buffer(bufnr)
+  local existing_augroup = vim.api.nvim_create_augroup(
+    augroup_name, { clear = false })
+
+  local existing_autocmd = vim.api.nvim_get_autocmds({
+    group = existing_augroup})
+  if #existing_autocmd ~= 0 then
+    return
+  end
+
   local augroup = vim.api.nvim_create_augroup(
-    augroup_name_for_buffer(bufnr), { clear = true })
+    augroup_name, { clear = true })
 
   -- ModeChanged matches by pattern
   -- But we can't match w/ both buffer & pattern
