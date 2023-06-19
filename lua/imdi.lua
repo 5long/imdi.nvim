@@ -151,6 +151,17 @@ local function registry_sticky_autocmd(bufnr)
       evaluate_sticky_situation(bufnr)
     end,
   })
+
+  vim.api.nvim_create_autocmd('CmdlineLeave', {
+    buffer = bufnr,
+    group = augroup,
+    callback = function()
+      local m = vim.fn.mode(1)
+      if is_cmd_search_mode(m) then
+        evaluate_sticky_situation(bufnr)
+      end
+    end,
+  })
 end
 
 M.enable_imdi_for_buffer = function(bufnr)
