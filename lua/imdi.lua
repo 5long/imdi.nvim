@@ -79,8 +79,7 @@ local function is_cmd_search_mode(m)
 end
 
 local function should_activate(m)
-  -- Neovim doesn't trigger ModeChanged new_mode=no* yet
-  return m == 'i' or m == 'R' or string.find(m, 'no') or is_cmd_search_mode(m)
+  return m == 'i' or m == 'R' or is_cmd_search_mode(m)
 end
 
 local function should_deactivate(m)
