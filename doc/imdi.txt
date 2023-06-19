@@ -7,6 +7,7 @@ For now only Fcitx5 is supported.
 ==============================================================================
 Usage:                                                            *imdi-usage*
 
+------------------------------------------------------------------------------
 Forced Mode                                                 *imdi-forced-mode*
 
 Run command |:IMEnable| to enable auto-toggling input method in current buffer.
@@ -15,20 +16,22 @@ Once enabled for a buffer, it activates input method when:
 
 * entering |Insert| mode
 * entering |Replace| mode
+* entering |Command-line| mode to type patterns (i.e. |/| and |?|)
 
 ... and deactivates input method when:
 
 * entering normal mode
-* temporarily enabling normal mode by pressing i_CTRL-O
+* temporarily enabling normal mode by pressing |i_CTRL-O|
 
 This is recommended to edit a single-language file when you want to activate
 the input method all the time by default.
 
 Run command |:IMDisable| to stop forced mode.
 
+------------------------------------------------------------------------------
 Sticky Mode                                                 *imdi-sticky-mode*
 
-Run command :IMStickyEnable to remember the state of input method the last
+Run command `:IMStickyEnable` to remember the state of input method the last
 time you leave Insert mode. Run `:IMStickyDisable` to stop it.
 
 This is recommended to edit a mixed-language file when you don't want to
@@ -36,14 +39,55 @@ always activate the input method. In other words, this works just like
 [fcitx.vim]: https://github.com/lilydjwg/fcitx.vim
 
 ==============================================================================
+Lua functions                                                   *imdi-lua-api*
+
+imdi provides Lua functions equivalents to all its commands. It is recommended
+to use lua funcitons for custom |key-mapping| and custom |autocmd|.
+
+All public API functions are expose as `require('imdi').function_name()`.
+
+An example of defining a custom key-binding: >lua
+
+    vim.keymap.set('n', '<Leader>ie', require('imdi').enable_forced_mode)
+    vim.keymap.set('n', '<Leader>id', require('imdi').disable_forced_mode)
+
+
+------------------------------------------------------------------------------
+imdi.enable_forced_mode(bufnr = nil)                 *imdi.enable_forced_mode*
+
+Equivalent of |:IMEnable|. Enable forced mode for a buffer (identified by
+parameter `bufnr`, defaults to current buffer).
+
+------------------------------------------------------------------------------
+imdi.disable_forced_mode(bufnr = nil)               *imdi.disable_forced_mode*
+
+Equivalent of |:IMDisable|. Symmetric to |imdi.enable_forced_mode|.
+
+------------------------------------------------------------------------------
+imdi.enable_sticky_mode(bufnr = nil)                 *imdi.enable_sticky_mode*
+
+Equivalent of |:IMStickyEnable|. Enable sticky mode for a buffer (identified
+by parameter `bufnr`, defaults to current buffer).
+
+------------------------------------------------------------------------------
+imdi.disable_sticky_mode(bufnr = nil)               *imdi.disable_sticky_mode*
+
+Equivalent of |:IMStickyDisable|. Symmetric to |imdi.disable_sticky_mode|.
+
+==============================================================================
 Commands:                                                      *imdi-commands*
 
-:IMEnable                                                          *:IMEnable*
+Forced mode commands                                   *:IMEnable* *IMDisable*
 
-Enable auto-toggling input method for current buffer.
+See |imdi-forced-mode|
 
-:IMDisable                                                        *:IMDisable*
+Sticky mode commands                        *IMStickyEnable* *IMStickyDisable*
 
-Disable auto-toggling input method for current buffer
+See |imdi-sticky-mode|
 
-vim:tw=78:ts=8:et:ft=help:norl:
+==============================================================================
+Configuration                                              *imdi-configuraion*
+
+This plugin has no config options yet.
+
+vim:tw=78:ts=4:et:ft=help:norl:conceallevel=0:

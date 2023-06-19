@@ -126,9 +126,9 @@ local function evaluate_sticky_situation(bufnr)
   init()
   local im_state = fcitx5:State()
   if im_state == FCITX5_STATE_ACTIVE then
-    M.enable_imdi_for_buffer(bufnr)
+    M.enable_forced_mode(bufnr)
   elseif im_state == FCITX5_STATE_INACTIVE then
-    M.disable_imdi_for_buffer(bufnr)
+    M.disable_forced_mode(bufnr)
   else
     print("imdi: unknown input method state "
       .. im_state .. ". Don't know what to do")
@@ -164,13 +164,13 @@ local function registry_sticky_autocmd(bufnr)
   })
 end
 
-M.enable_imdi_for_buffer = function(bufnr)
+M.enable_forced_mode = function(bufnr)
   bufnr = (bufnr or bufnr ~= 0) and bufnr or vim.fn.bufnr()
   init()
   register_autocmd(bufnr)
 end
 
-M.disable_imdi_for_buffer = function(bufnr)
+M.disable_forced_mode = function(bufnr)
   bufnr = (bufnr or bufnr ~= 0) and bufnr or vim.fn.bufnr()
   clear_autocmd(bufnr)
 end
@@ -179,15 +179,15 @@ M.get_fcitx5_conn = function ()
   return fcitx5
 end
 
-M.enable_sticky_for_buffer = function(bufnr)
+M.enable_sticky_mode = function(bufnr)
   bufnr = (bufnr or bufnr ~= 0) and bufnr or vim.fn.bufnr()
   registry_sticky_autocmd(bufnr)
 end
 
-M.disable_sticky_for_buffer = function(bufnr)
+M.disable_sticky_mode = function(bufnr)
   bufnr = (bufnr or bufnr ~= 0) and bufnr or vim.fn.bufnr()
   clear_sticky_autocmd(bufnr)
-  M.disable_imdi_for_buffer(bufnr)
+  M.disable_forced_mode(bufnr)
 end
 
 return M

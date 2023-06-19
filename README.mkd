@@ -1,6 +1,6 @@
 # imdi.nvim
 
-Toggle [input method] when entering / leaving insert mode.
+Toggle [input method] when switching between modes.
 
 IMDI name means "Input Method DBus Integration"
 
@@ -29,9 +29,9 @@ Run command `:IMEnable` to enable auto switching for current buffer,
 a single-language file  with input method activated all the time".
 
 Alternatively, run command `:IMStickyEnable` to remember the status
-of input method the last time leaving insert mode. This is
-recommended for "editing a mixed-languages file". In other words,
-this works just like [fcitx.vim].
+of input method the last time leaving Insert mode / typing search
+patterns. This is recommended for "editing a mixed-languages file".
+In other words, this works just like [fcitx.vim].
 
 ## License
 
