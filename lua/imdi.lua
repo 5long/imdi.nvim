@@ -1,5 +1,4 @@
 local dbus = require('dbus_proxy')
-local uv = vim.uv or vim.loop
 
 local M = {}
 local fcitx5 = nil
@@ -42,13 +41,13 @@ end
 
 local function activate()
   init()
-  local ok, err = fcitx5:Activate()
+  local ok, _ = fcitx5:Activate()
   if not ok then reconnect_and_retry("Activate") end
 end
 
 local function deactivate()
   init()
-  local ok, err = fcitx5:Deactivate()
+  local ok, _ = fcitx5:Deactivate()
   if not ok then reconnect_and_retry("Deactivate") end
 end
 
@@ -80,7 +79,7 @@ local function should_deactivate(m)
   return m == 'n' or string.find(m, 'ni')
 end
 
-local function mode_changed(ev)
+local function mode_changed(_)
   local m = vim.fn.mode(1)
 
   if should_activate(m) then
@@ -146,12 +145,6 @@ local function registry_sticky_autocmd(bufnr)
   })
 end
 
-local function disable_sticky_for_buffer(bufnr)
-  local augroup = 'imdi-sticky-' .. bufnr
-  vim.api.nvim_del_augroup_by_name(augroup)
-  M.disable_imdi_for_buffer(bufnr)
-end
-
 M.enable_imdi_for_buffer = function(bufnr)
   bufnr = (bufnr or bufnr ~= 0) and bufnr or vim.fn.bufnr()
   init()
@@ -175,6 +168,7 @@ end
 M.disable_sticky_for_buffer = function(bufnr)
   bufnr = (bufnr or bufnr ~= 0) and bufnr or vim.fn.bufnr()
   clear_sticky_autocmd(bufnr)
+  M.disable_imdi_for_buffer(bufnr)
 end
 
 return M
