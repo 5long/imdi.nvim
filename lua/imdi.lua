@@ -70,9 +70,17 @@ local function clear_autocmd(bufnr)
   end, error_handler)
 end
 
+local function is_cmd_search_mode(m)
+  if m ~= 'c' then
+    return false
+  end
+  local cmdtype = vim.fn.getcmdtype() 
+  return cmdtype == '/' or cmdtype == '?'
+end
+
 local function should_activate(m)
   -- Neovim doesn't trigger ModeChanged new_mode=no* yet
-  return m == 'i' or m == 'R' or string.find(m, 'no')
+  return m == 'i' or m == 'R' or string.find(m, 'no') or is_cmd_search_mode(m)
 end
 
 local function should_deactivate(m)
