@@ -7,19 +7,17 @@ IMDI name means "Input Method DBus Integration"
 ## Dependencies
 
 * Running [Fcitx5] accessible via session bus of DBus
-* [lua_dbus-proxy]
+* [lua-dbus_proxy]
 
 ## Install
 
-With [packer.nvim]:
+First, install dependency [lua-dbus_proxy] for luajit. On Arch Linux
+it's available on [AUR].
+
+Then, with `vim.pack` (available since Neovim 0.12):
 
 ```
-return require('packer').startup(function(use)
-  use {
-    "5long/imdi.nvim",
-    rocks = 'dbus_proxy',
-  }
-end)
+vim.pack.add('https://github.com/5long/imdi.nvim')
 ```
 
 ## Usage
@@ -40,6 +38,7 @@ See [LICENSE]
 [Fcitx5]: https://fcitx-im.org/
 [input method]: https://wiki.archlinux.org/title/Input_method
 [packer.nvim]: https://github.com/wbthomason/packer.nvim
-[lua_dbus-proxy]: https://github.com/stefano-m/lua-dbus_proxy
+[lua-dbus_proxy]: https://github.com/stefano-m/lua-dbus_proxy
+[AUR]: https://aur.archlinux.org/packages/lua51-dbus_proxy
 [LICENSE]: ./LICENSE
 [fcitx.vim]: https://github.com/lilydjwg/fcitx.vim
