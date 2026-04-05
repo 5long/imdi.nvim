@@ -12,7 +12,10 @@ IMDI name means "Input Method DBus Integration"
 ## Install
 
 First, install dependency [lua-dbus_proxy] for luajit. On Arch Linux
-it's available on [AUR].
+it's available on AUR: [lua51-dbus_proxy].
+
+Alternatively, if your plugin manager (e.g. [lazy.nvim]) supports
+rockspec, it can automatically install the [lua-dbus_proxy] dependency.
 
 Then, with `vim.pack` (available since Neovim 0.12):
 
@@ -39,6 +42,7 @@ See [LICENSE]
 [input method]: https://wiki.archlinux.org/title/Input_method
 [packer.nvim]: https://github.com/wbthomason/packer.nvim
 [lua-dbus_proxy]: https://github.com/stefano-m/lua-dbus_proxy
-[AUR]: https://aur.archlinux.org/packages/lua51-dbus_proxy
+[lua51-dbus_proxy]: https://aur.archlinux.org/packages/lua51-dbus_proxy
 [LICENSE]: ./LICENSE
 [fcitx.vim]: https://github.com/lilydjwg/fcitx.vim
+[lazy.nvim]: https://lazy.folke.io/packages#rockspec
